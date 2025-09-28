@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: unmanaged
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-unmanaged
+  namespace: unmanaged
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: nginx-unmanaged
+  template:
+    metadata:
+      labels:
+        app: nginx-unmanaged
+    spec:
+      hostNetwork: true   # bypass CNI, no Cilium endpoint
+      containers:
+      - name: nginx
+        image: nginx:stable
+        ports:
+        - containerPort: 80
+
